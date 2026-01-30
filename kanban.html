@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aaron × Betty — Kanban</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    header p {
+      color: #888;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .column {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 500px;
+    }
+    .column-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .column-header .emoji { font-size: 1.2rem; }
+    .column-header h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .column-header .count {
+      margin-left: auto;
+      background: rgba(255,255,255,0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 3px solid #4a9eff;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .card.goal { border-left-color: #ffd700; }
+    .card.automation { border-left-color: #9b59b6; }
+    .card.content { border-left-color: #2ecc71; }
+    .card.setup { border-left-color: #e74c3c; }
+    .card.business { border-left-color: #f39c12; }
+    .card h3 {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 0.8rem;
+      color: #aaa;
+      line-height: 1.4;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 8px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .tag.goal { background: rgba(255,215,0,0.2); color: #ffd700; }
+    .tag.automation { background: rgba(155,89,182,0.2); color: #bb8fce; }
+    .tag.content { background: rgba(46,204,113,0.2); color: #2ecc71; }
+    .tag.setup { background: rgba(231,76,60,0.2); color: #e74c3c; }
+    .tag.business { background: rgba(243,156,18,0.2); color: #f39c12; }
+    .goals-section {
+      background: rgba(255,215,0,0.05);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .goals-section h2 {
+      font-size: 1rem;
+      color: #ffd700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .goal-card {
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .goal-card .metric {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffd700;
+    }
+    .goal-card .label {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 4px;
+    }
+    .goal-card .target {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 8px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      color: #555;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🦞 Aaron × Betty</h1>
+    <p>Last updated: Jan 30, 2026 • Tokyo Time</p>
+  </header>
+
+  <section class="goals-section">
+    <h2>🎯 2025 Goals</h2>
+    <div class="goals-grid">
+      <div class="goal-card">
+        <div class="metric">1,000</div>
+        <div class="label">TBO Monthly Subscribers</div>
+        <div class="target">Current: TBD → Goal by EOY</div>
+      </div>
+      <div class="goal-card">
+        <div class="metric">100K</div>
+        <div class="label">YouTube Subscribers</div>
+        <div class="target">Current: ~57K → +43K needed</div>
+      </div>
+      <div class="goal-card">
+        <div class="metric">100K</div>
+        <div class="label">X/Twitter Followers</div>
+        <div class="target">Current: TBD → Goal by EOY</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="board">
+    <!-- BACKLOG -->
+    <div class="column">
+      <div class="column-header">
+        <span class="emoji">📋</span>
+        <h2>Backlog</h2>
+        <span class="count">6</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Shorts Workflow Automation</h3>
+        <p>iPhone → Auphonic → AI text → schedule. Full hands-off.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Thumbnail Generator</h3>
+        <p>Skip Canva resize. Direct 16:9 output from Imagine.Art or alternative.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Discord → Zendesk Bot</h3>
+        <p>Auto-create tickets from support requests. Reduce Vlad's manual work.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Trending Coins Feed</h3>
+        <p>API for top movers in top 200 mcap. Daily briefing for chart review.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card business">
+        <h3>Micro-Influencer Affiliate Program</h3>
+        <p>Currently stalled with Nairi. Need to unstick or reassign.</p>
+        <span class="tag business">Business</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>TradingView Alerts Automation</h3>
+        <p>Vlad's task. Could be automated further.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+    </div>
+
+    <!-- TO DO -->
+    <div class="column">
+      <div class="column-header">
+        <span class="emoji">📝</span>
+        <h2>To Do</h2>
+        <span class="count">5</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>Twitter/X Access (bird CLI)</h3>
+        <p>Set up authentication so Betty can monitor mentions & engagement.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Comment Scraper</h3>
+        <p>Auto-extract viewer picks from previous video. Schedule 8 AM JST.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Video Pipeline Automation</h3>
+        <p>OBS → upload → transcribe → summary → thumbnail → publish. One command.</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card automation">
+        <h3>Written Analysis Distribution</h3>
+        <p>Text → all outputs in parallel (CB Discord, Kitco doc, X thread).</p>
+        <span class="tag automation">Automation</span>
+      </div>
+      
+      <div class="card business">
+        <h3>Define February Goals</h3>
+        <p>Specific targets for the month. Tie to EOY goals.</p>
+        <span class="tag business">Business</span>
+      </div>
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div class="column">
+      <div class="column-header">
+        <span class="emoji">🔄</span>
+        <h2>In Progress</h2>
+        <span class="count">2</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>Claude Max Migration</h3>
+        <p>Switched from API to subscription auth. Testing stability.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card content">
+        <h3>Daily Content Workflow</h3>
+        <p>Chart review → video → upload → distribute. Running manually.</p>
+        <span class="tag content">Content</span>
+      </div>
+    </div>
+
+    <!-- DONE -->
+    <div class="column">
+      <div class="column-header">
+        <span class="emoji">✅</span>
+        <h2>Done</h2>
+        <span class="count">7</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>Gmail Setup</h3>
+        <p>bettybot2026@gmail.com working with OAuth.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>GitHub CLI Auth</h3>
+        <p>Authenticated as aoraion. Full repo access.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>Discord Bot Connected</h3>
+        <p>Betty Bot online and responding.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>ElevenLabs TTS</h3>
+        <p>Voice: Jessica (playful, bright, warm).</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>Skills Installed</h3>
+        <p>1password, apple-notes, sag, clawdhub, tmux, ffmpeg, gh CLI.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card setup">
+        <h3>OpenClaw Migration</h3>
+        <p>Upgraded from Clawd. All systems operational.</p>
+        <span class="tag setup">Setup</span>
+      </div>
+      
+      <div class="card business">
+        <h3>Revenue Streams Documented</h3>
+        <p>TBO, courses, partnerships mapped in MEMORY.md.</p>
+        <span class="tag business">Business</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Built by Betty 🦞 • Updated automatically • View anytime via Canvas
+  </footer>
+</body>
+</html>
