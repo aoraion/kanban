@@ -58,37 +58,57 @@
     .goals-banner {
       background: rgba(255,215,0,0.05);
       border-bottom: 1px solid rgba(255,215,0,0.2);
-      padding: 12px 16px;
+      padding: 16px 24px;
     }
     .goals-grid {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .goal-card {
       background: rgba(255,255,255,0.05);
-      padding: 12px 16px;
-      border-radius: 8px;
-      min-width: 160px;
-      flex-shrink: 0;
+      padding: 16px 20px;
+      border-radius: 10px;
+      text-align: center;
     }
-    .goal-card .icon { font-size: 1.2rem; margin-bottom: 4px; }
-    .goal-card .label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
-    .goal-card .value { font-size: 1.3rem; font-weight: 700; color: #ffd700; }
-    .goal-card .target { font-size: 0.7rem; color: #666; margin-top: 2px; }
+    .goal-card .icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .goal-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+    .goal-card .value { font-size: 1.8rem; font-weight: 700; color: #ffd700; margin: 4px 0; }
+    .goal-card .target { font-size: 0.75rem; color: #666; }
     .goal-card .progress-bar {
-      height: 4px;
+      height: 6px;
       background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      margin-top: 8px;
+      border-radius: 3px;
+      margin-top: 10px;
       overflow: hidden;
     }
     .goal-card .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #ffd700, #f39c12);
-      border-radius: 2px;
+      border-radius: 3px;
       transition: width 0.5s;
+    }
+    
+    /* Mobile goals - horizontal scroll */
+    @media (max-width: 700px) {
+      .goals-banner { padding: 12px 16px; }
+      .goals-grid {
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 10px;
+        scroll-snap-type: x mandatory;
+      }
+      .goal-card {
+        min-width: 140px;
+        flex-shrink: 0;
+        padding: 12px 14px;
+        scroll-snap-align: start;
+      }
+      .goal-card .icon { font-size: 1.2rem; }
+      .goal-card .value { font-size: 1.3rem; }
     }
     
     /* Board */
@@ -472,9 +492,17 @@
     const YT_API_KEY = 'AIzaSyCYyKEXLSO3RGo04AYAcO105LwlrROqY-g';
     const YT_CHANNEL_ID = 'UC1BCNwXAHuCWKzRlwv72DHQ';
     
+    // Sync endpoints - tries in order (localhost first for local dev, then any Tailscale/remote)
+    const SYNC_ENDPOINTS = [
+      'http://localhost:8888',
+      'http://127.0.0.1:8888',
+      // Add Tailscale IP here when available, e.g.: 'http://100.x.x.x:8888'
+    ];
+    
     let data = null;
     let currentTaskId = null;
     let useLocalStorage = true;
+    let syncEndpoint = null;
     let konamiCode = [];
     const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     
@@ -539,37 +567,101 @@
     }
     
     async function checkApi() {
+      // Try each sync endpoint
+      for (const endpoint of SYNC_ENDPOINTS) {
+        try {
+          const res = await fetch(`${endpoint}/api/data`, { method: 'GET', mode: 'cors' });
+          if (res.ok) {
+            syncEndpoint = endpoint;
+            useLocalStorage = false;
+            return true;
+          }
+        } catch (e) {}
+      }
+      // Also check relative path (for when served from same origin)
       try {
         const res = await fetch('/api/data', { method: 'GET' });
-        if (res.ok) { useLocalStorage = false; return true; }
+        if (res.ok) {
+          syncEndpoint = '';
+          useLocalStorage = false;
+          return true;
+        }
       } catch (e) {}
       return false;
     }
     
     async function loadData() {
       await checkApi();
-      if (!useLocalStorage) {
-        const res = await fetch('/api/data');
-        data = await res.json();
-        document.getElementById('storage-mode').textContent = '🔗 Synced';
-      } else {
+      if (!useLocalStorage && syncEndpoint !== null) {
+        try {
+          const res = await fetch(`${syncEndpoint}/api/data`);
+          data = await res.json();
+          // Also save to localStorage as backup
+          localStorage.setItem('kanban-data-v2', JSON.stringify(data));
+          document.getElementById('storage-mode').textContent = '🔗 Synced to Betty';
+        } catch (e) {
+          useLocalStorage = true;
+        }
+      }
+      
+      if (useLocalStorage) {
         const stored = localStorage.getItem('kanban-data-v2');
         if (stored) {
           data = JSON.parse(stored);
         } else {
           data = JSON.parse(JSON.stringify(defaultData));
-          saveToStorage();
         }
-        document.getElementById('storage-mode').textContent = '💾 Local';
+        document.getElementById('storage-mode').textContent = '💾 Local only';
+        // Try to sync local data to server in background
+        trySyncToServer();
       }
       renderBoard();
       fetchYouTubeStats();
     }
     
+    // Try to sync localStorage data to server (background)
+    async function trySyncToServer() {
+      for (const endpoint of SYNC_ENDPOINTS) {
+        try {
+          const res = await fetch(`${endpoint}/api/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            mode: 'cors'
+          });
+          if (res.ok) {
+            syncEndpoint = endpoint;
+            useLocalStorage = false;
+            document.getElementById('storage-mode').textContent = '🔗 Synced to Betty';
+            return true;
+          }
+        } catch (e) {}
+      }
+      return false;
+    }
+    
     async function saveToStorage() {
       data.meta.lastUpdated = new Date().toISOString();
-      if (useLocalStorage) {
-        localStorage.setItem('kanban-data-v2', JSON.stringify(data));
+      // Always save to localStorage as backup
+      localStorage.setItem('kanban-data-v2', JSON.stringify(data));
+      
+      // Try to sync to server (Betty can see changes)
+      if (syncEndpoint !== null) {
+        try {
+          await fetch(`${syncEndpoint}/api/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+            mode: 'cors'
+          });
+          document.getElementById('storage-mode').textContent = '🔗 Synced to Betty';
+        } catch (e) {
+          // Server unavailable, but localStorage saved
+          document.getElementById('storage-mode').textContent = '💾 Local (offline)';
+        }
+      } else {
+        // Try to find a server in background
+        trySyncToServer();
       }
     }
     
