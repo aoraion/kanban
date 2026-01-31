@@ -51,7 +51,44 @@
       color: #666;
       position: absolute;
       bottom: -14px;
-      left: 16px;
+      left: 0;
+    }
+    
+    /* Goals Banner */
+    .goals-banner {
+      background: rgba(255,215,0,0.05);
+      border-bottom: 1px solid rgba(255,215,0,0.2);
+      padding: 12px 16px;
+    }
+    .goals-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .goal-card {
+      background: rgba(255,255,255,0.05);
+      padding: 12px 16px;
+      border-radius: 8px;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+    .goal-card .icon { font-size: 1.2rem; margin-bottom: 4px; }
+    .goal-card .label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+    .goal-card .value { font-size: 1.3rem; font-weight: 700; color: #ffd700; }
+    .goal-card .target { font-size: 0.7rem; color: #666; margin-top: 2px; }
+    .goal-card .progress-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .goal-card .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ffd700, #f39c12);
+      border-radius: 2px;
+      transition: width 0.5s;
     }
     
     /* Board */
@@ -60,7 +97,7 @@
       gap: 12px;
       padding: 16px;
       overflow-x: auto;
-      min-height: calc(100vh - 60px);
+      min-height: calc(100vh - 140px);
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
     }
@@ -122,9 +159,7 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .task.dragging {
-      opacity: 0.5;
-    }
+    .task.dragging { opacity: 0.5; }
     .task-title {
       font-size: 0.85rem;
       font-weight: 500;
@@ -150,19 +185,10 @@
       text-transform: uppercase;
       font-weight: 600;
     }
-    .task-assignee {
-      margin-left: auto;
-      font-size: 0.9rem;
-    }
-    .task-due {
-      font-size: 0.65rem;
-      color: #888;
-    }
+    .task-assignee { margin-left: auto; font-size: 0.9rem; }
+    .task-due { font-size: 0.65rem; color: #888; }
     .task-due.overdue { color: #e74c3c; }
-    .task-comments-count {
-      font-size: 0.65rem;
-      color: #888;
-    }
+    .task-comments-count { font-size: 0.65rem; color: #888; }
     
     /* Modal */
     .modal-overlay {
@@ -201,9 +227,7 @@
       padding: 0 8px;
     }
     .modal-body { padding: 16px; }
-    .form-group {
-      margin-bottom: 14px;
-    }
+    .form-group { margin-bottom: 14px; }
     .form-group label {
       display: block;
       font-size: 0.75rem;
@@ -221,16 +245,8 @@
       font-size: 0.9rem;
     }
     .form-group textarea { min-height: 70px; resize: vertical; }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .tags-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tags-container { display: flex; flex-wrap: wrap; gap: 6px; }
     .tag-option {
       padding: 6px 10px;
       border-radius: 4px;
@@ -241,45 +257,23 @@
     }
     .tag-option.selected { opacity: 1; }
     
-    /* Comments */
     .comments-section {
       border-top: 1px solid rgba(255,255,255,0.1);
       padding-top: 14px;
       margin-top: 14px;
     }
-    .comments-section h4 {
-      font-size: 0.8rem;
-      margin-bottom: 10px;
-      color: #888;
-    }
+    .comments-section h4 { font-size: 0.8rem; margin-bottom: 10px; color: #888; }
     .comment {
       background: rgba(255,255,255,0.03);
       padding: 10px;
       border-radius: 6px;
       margin-bottom: 8px;
     }
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 4px;
-    }
-    .comment-author {
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .comment-time {
-      font-size: 0.65rem;
-      color: #666;
-    }
-    .comment-text {
-      font-size: 0.8rem;
-      color: #ccc;
-    }
-    .comment-input {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
+    .comment-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .comment-author { font-size: 0.75rem; font-weight: 500; }
+    .comment-time { font-size: 0.65rem; color: #666; }
+    .comment-text { font-size: 0.8rem; color: #ccc; }
+    .comment-input { display: flex; gap: 8px; margin-top: 10px; }
     .comment-input input {
       flex: 1;
       background: rgba(255,255,255,0.05);
@@ -301,7 +295,6 @@
     .btn-danger { background: #c0392b; border-color: #c0392b; }
     .btn-danger:hover { background: #a93226; }
     
-    /* Add task button */
     .add-task-btn {
       width: 100%;
       padding: 10px;
@@ -312,12 +305,8 @@
       cursor: pointer;
       font-size: 0.8rem;
     }
-    .add-task-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
+    .add-task-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
     
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -334,7 +323,6 @@
     }
     .toast.show { opacity: 1; }
     
-    /* Easter egg */
     .easter-egg-hint {
       position: fixed;
       bottom: 8px;
@@ -343,24 +331,20 @@
       color: rgba(255,255,255,0.08);
     }
     
-    /* Mobile adjustments */
     @media (max-width: 600px) {
       header { padding: 10px 12px; }
       header h1 { font-size: 1rem; }
       header h1 span { display: none; }
       .btn { padding: 6px 10px; font-size: 0.75rem; }
+      .goals-banner { padding: 10px 12px; }
+      .goal-card { min-width: 140px; padding: 10px 12px; }
+      .goal-card .value { font-size: 1.1rem; }
       .board { padding: 12px; gap: 10px; }
       .column { min-width: 85vw; max-width: 85vw; }
-      .column-header { padding: 12px; }
-      .column-tasks { padding: 8px; }
-      .task { padding: 10px; }
-      .task-title { font-size: 0.9rem; }
-      .modal { margin: 10px; border-radius: 10px; }
-      .modal-body { padding: 14px; }
+      .modal { margin: 10px; }
       .form-row { grid-template-columns: 1fr; }
     }
     
-    /* Swipe hint for mobile */
     .swipe-hint {
       display: none;
       position: fixed;
@@ -373,9 +357,7 @@
       font-size: 0.75rem;
       color: #888;
     }
-    @media (max-width: 600px) {
-      .swipe-hint { display: block; }
-    }
+    @media (max-width: 600px) { .swipe-hint { display: block; } }
   </style>
 </head>
 <body>
@@ -390,11 +372,37 @@
     </div>
   </header>
   
-  <div class="board" id="board"></div>
+  <!-- Goals Banner -->
+  <div class="goals-banner">
+    <div class="goals-grid">
+      <div class="goal-card">
+        <div class="icon">📈</div>
+        <div class="label">TBO Monthly Subs</div>
+        <div class="value" id="tbo-current">—</div>
+        <div class="target">Goal: 1,000</div>
+        <div class="progress-bar"><div class="progress-fill" id="tbo-progress" style="width:0%"></div></div>
+      </div>
+      <div class="goal-card">
+        <div class="icon">📺</div>
+        <div class="label">YouTube Subscribers</div>
+        <div class="value" id="yt-current">Loading...</div>
+        <div class="target">Goal: 100K</div>
+        <div class="progress-bar"><div class="progress-fill" id="yt-progress" style="width:57%"></div></div>
+      </div>
+      <div class="goal-card">
+        <div class="icon">𝕏</div>
+        <div class="label">X/Twitter Followers</div>
+        <div class="value" id="x-current">—</div>
+        <div class="target">Goal: 50K</div>
+        <div class="progress-bar"><div class="progress-fill" id="x-progress" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
   
+  <div class="board" id="board"></div>
   <div class="swipe-hint">← Swipe to see columns →</div>
   
-  <!-- Task Modal -->
+  <!-- Modal -->
   <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       <div class="modal-header">
@@ -438,7 +446,6 @@
             <option value="done">✅ Done</option>
           </select>
         </div>
-        
         <div class="comments-section" id="comments-section" style="display:none;">
           <h4>💬 Comments</h4>
           <div id="comments-list"></div>
@@ -462,13 +469,16 @@
   <div class="easter-egg-hint">↑↑↓↓←→←→BA</div>
 
   <script>
+    const YT_API_KEY = 'AIzaSyCYyKEXLSO3RGo04AYAcO105LwlrROqY-g';
+    const YT_CHANNEL_ID = 'UC1BCNwXAHuCWKzRlwv72DHQ';
+    
     let data = null;
     let currentTaskId = null;
     let useLocalStorage = true;
     let konamiCode = [];
     const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     
-    // Default data structure
+    // Pre-loaded tasks
     const defaultData = {
       meta: { lastUpdated: new Date().toISOString(), version: 1 },
       users: {
@@ -488,65 +498,86 @@
         { id: "inprogress", title: "In Progress", emoji: "🔄" },
         { id: "done", title: "Done", emoji: "✅" }
       ],
-      tasks: []
+      tasks: [
+        { id: "task-1", title: "Twitter/X Access (bird CLI)", description: "Set up authentication so Betty can monitor mentions & engagement.", column: "todo", tags: ["setup"], assignee: "aaron", dueDate: null, comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-2", title: "YouTube Comment Scraper", description: "Auto-extract viewer crypto requests. Runs daily at 7 AM JST. Now filters to last 24h only.", column: "done", tags: ["automation"], assignee: "betty", dueDate: null, comments: [{ id: "c1", author: "betty", text: "Fixed! Now filters to last 24h only.", timestamp: "2026-01-31T01:17:00.000Z" }], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-31T01:17:00.000Z" },
+        { id: "task-3", title: "Video Pipeline Automation", description: "OBS → upload → transcribe → summary → thumbnail → publish. One command.", column: "backlog", tags: ["automation"], assignee: null, dueDate: null, comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-4", title: "Interactive Kanban Board", description: "Build full drag & drop kanban with comments, assignments, due dates, mobile support, GitHub Pages.", column: "done", tags: ["automation"], assignee: "betty", dueDate: "2026-01-31", comments: [{ id: "c2", author: "aaron", text: "Make it interactive for both of us!", timestamp: "2026-01-31T02:50:00.000Z" }, { id: "c3", author: "betty", text: "Done! Mobile-friendly + goals banner added.", timestamp: "2026-01-31T03:03:00.000Z" }], createdAt: "2026-01-31T02:50:00.000Z", updatedAt: "2026-01-31T03:03:00.000Z" },
+        { id: "task-5", title: "Morning Update Cron", description: "Daily Discord DM summarizing overnight work. 7:30 AM JST.", column: "done", tags: ["automation"], assignee: "betty", dueDate: null, comments: [], createdAt: "2026-01-30T14:30:00.000Z", updatedAt: "2026-01-30T23:30:00.000Z" },
+        { id: "task-6", title: "Shorts Workflow Automation", description: "iPhone → Auphonic → AI text → schedule. Full hands-off.", column: "backlog", tags: ["automation", "content"], assignee: null, dueDate: null, comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-7", title: "TBO: 1,000 Monthly Subscribers", description: "EOY 2025 goal. Track progress and tactics.", column: "inprogress", tags: ["goal", "business"], assignee: "aaron", dueDate: "2025-12-31", comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-8", title: "YouTube: 100K Subscribers", description: "Currently ~57K. EOY 2025 goal.", column: "inprogress", tags: ["goal", "content"], assignee: "aaron", dueDate: "2025-12-31", comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-9", title: "Claude Max Migration", description: "Switch from API to subscription auth.", column: "done", tags: ["setup"], assignee: "betty", dueDate: null, comments: [{ id: "c4", author: "betty", text: "Complete! Running on OAuth now.", timestamp: "2026-01-30T14:00:00.000Z" }], createdAt: "2026-01-30T13:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-10", title: "Define February Goals", description: "Specific targets for the month tied to EOY goals.", column: "todo", tags: ["business"], assignee: "aaron", dueDate: "2026-02-01", comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-11", title: "Gmail Setup", description: "bettybot2026@gmail.com working with OAuth.", column: "done", tags: ["setup"], assignee: "betty", dueDate: null, comments: [], createdAt: "2026-01-30T05:00:00.000Z", updatedAt: "2026-01-30T05:30:00.000Z" },
+        { id: "task-12", title: "GitHub CLI Auth", description: "Authenticated as aoraion. Full repo access.", column: "done", tags: ["setup"], assignee: "betty", dueDate: null, comments: [], createdAt: "2026-01-30T05:00:00.000Z", updatedAt: "2026-01-30T05:30:00.000Z" },
+        { id: "task-13", title: "Thumbnail Generator", description: "Skip Canva resize. Direct 16:9 output from Imagine.Art or alternative.", column: "backlog", tags: ["automation", "content"], assignee: null, dueDate: null, comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-14", title: "Discord → Zendesk Bot", description: "Auto-create tickets from support requests. Reduce Vlad's manual work.", column: "backlog", tags: ["automation"], assignee: null, dueDate: null, comments: [], createdAt: "2026-01-30T14:00:00.000Z", updatedAt: "2026-01-30T14:00:00.000Z" },
+        { id: "task-15", title: "X/Twitter: 50K Followers", description: "EOY 2025 goal.", column: "inprogress", tags: ["goal", "content"], assignee: "aaron", dueDate: "2025-12-31", comments: [], createdAt: "2026-01-31T03:00:00.000Z", updatedAt: "2026-01-31T03:00:00.000Z" }
+      ],
+      goals: [
+        { id: "goal-1", title: "TBO Monthly Subs", target: 1000, current: null },
+        { id: "goal-2", title: "YouTube Subs", target: 100000, current: 57000 },
+        { id: "goal-3", title: "X Followers", target: 50000, current: null }
+      ]
     };
     
-    // Check if API is available
+    // Fetch YouTube subscriber count
+    async function fetchYouTubeStats() {
+      try {
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YT_CHANNEL_ID}&key=${YT_API_KEY}`);
+        const data = await res.json();
+        if (data.items && data.items[0]) {
+          const subs = parseInt(data.items[0].statistics.subscriberCount);
+          document.getElementById('yt-current').textContent = (subs / 1000).toFixed(1) + 'K';
+          const pct = Math.min(100, (subs / 100000) * 100);
+          document.getElementById('yt-progress').style.width = pct + '%';
+        }
+      } catch (e) {
+        document.getElementById('yt-current').textContent = '~57K';
+      }
+    }
+    
     async function checkApi() {
       try {
         const res = await fetch('/api/data', { method: 'GET' });
-        if (res.ok) {
-          useLocalStorage = false;
-          return true;
-        }
+        if (res.ok) { useLocalStorage = false; return true; }
       } catch (e) {}
       return false;
     }
     
-    // Load data
     async function loadData() {
-      const apiAvailable = await checkApi();
-      
+      await checkApi();
       if (!useLocalStorage) {
-        // Use API
         const res = await fetch('/api/data');
         data = await res.json();
-        document.getElementById('storage-mode').textContent = '🔗 Synced with server';
+        document.getElementById('storage-mode').textContent = '🔗 Synced';
       } else {
-        // Use localStorage
-        const stored = localStorage.getItem('kanban-data');
+        const stored = localStorage.getItem('kanban-data-v2');
         if (stored) {
           data = JSON.parse(stored);
         } else {
           data = JSON.parse(JSON.stringify(defaultData));
           saveToStorage();
         }
-        document.getElementById('storage-mode').textContent = '💾 Local storage';
+        document.getElementById('storage-mode').textContent = '💾 Local';
       }
-      
       renderBoard();
+      fetchYouTubeStats();
     }
     
-    // Save to storage
     async function saveToStorage() {
       data.meta.lastUpdated = new Date().toISOString();
-      if (!useLocalStorage) {
-        // API handles saving
-      } else {
-        localStorage.setItem('kanban-data', JSON.stringify(data));
+      if (useLocalStorage) {
+        localStorage.setItem('kanban-data-v2', JSON.stringify(data));
       }
     }
     
-    // Generate ID
-    function genId() {
-      return 'task-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    }
+    function genId() { return 'task-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
     
-    // Render board
     function renderBoard() {
       const board = document.getElementById('board');
       board.innerHTML = '';
-      
       data.columns.forEach(col => {
         const tasks = data.tasks.filter(t => t.column === col.id);
         const colEl = document.createElement('div');
@@ -564,22 +595,18 @@
         `;
         board.appendChild(colEl);
       });
-      
       setupDragDrop();
     }
     
-    // Render task card
     function renderTask(task) {
       const tagHtml = (task.tags || []).map(t => {
         const tag = data.tags[t];
         return tag ? `<span class="tag" style="background:${tag.color}30;color:${tag.color}">${tag.label}</span>` : '';
       }).join('');
-      
       const assignee = task.assignee ? data.users[task.assignee]?.emoji : '';
       const dueClass = task.dueDate && new Date(task.dueDate) < new Date() ? 'overdue' : '';
       const dueText = task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '';
       const commentCount = task.comments?.length || 0;
-      
       return `
         <div class="task" draggable="true" data-id="${task.id}" onclick="openModal(null, '${task.id}')">
           <div class="task-title">${escapeHtml(task.title)}</div>
@@ -594,74 +621,33 @@
       `;
     }
     
-    // Drag and drop
     function setupDragDrop() {
-      const tasks = document.querySelectorAll('.task');
-      const columns = document.querySelectorAll('.column-tasks');
-      
-      tasks.forEach(task => {
-        task.addEventListener('dragstart', (e) => {
-          e.stopPropagation();
-          task.classList.add('dragging');
-          e.dataTransfer.setData('text/plain', task.dataset.id);
-        });
+      document.querySelectorAll('.task').forEach(task => {
+        task.addEventListener('dragstart', (e) => { e.stopPropagation(); task.classList.add('dragging'); e.dataTransfer.setData('text/plain', task.dataset.id); });
         task.addEventListener('dragend', () => task.classList.remove('dragging'));
-        
-        // Touch support
-        let touchStartY = 0;
-        task.addEventListener('touchstart', (e) => {
-          touchStartY = e.touches[0].clientY;
-        }, { passive: true });
       });
-      
-      columns.forEach(col => {
-        col.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          col.classList.add('drag-over');
-        });
+      document.querySelectorAll('.column-tasks').forEach(col => {
+        col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
         col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
-        col.addEventListener('drop', async (e) => {
-          e.preventDefault();
-          col.classList.remove('drag-over');
-          const taskId = e.dataTransfer.getData('text/plain');
-          const newColumn = col.dataset.column;
-          await moveTask(taskId, newColumn);
-        });
+        col.addEventListener('drop', async (e) => { e.preventDefault(); col.classList.remove('drag-over'); await moveTask(e.dataTransfer.getData('text/plain'), col.dataset.column); });
       });
     }
     
-    // Move task
     async function moveTask(taskId, newColumn) {
       const task = data.tasks.find(t => t.id === taskId);
       if (!task || task.column === newColumn) return;
-      
       task.column = newColumn;
       task.updatedAt = new Date().toISOString();
-      
-      if (!useLocalStorage) {
-        await fetch(`/api/tasks/${taskId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ column: newColumn })
-        });
-      }
-      
+      if (!useLocalStorage) await fetch(`/api/tasks/${taskId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ column: newColumn }) });
       await saveToStorage();
       renderBoard();
       showToast('Task moved!');
     }
     
-    // Open modal
     function openModal(column = null, taskId = null) {
       currentTaskId = taskId;
-      const modal = document.getElementById('modal');
-      
-      // Render tags
       const tagsContainer = document.getElementById('tags-container');
-      tagsContainer.innerHTML = Object.entries(data.tags).map(([id, tag]) => 
-        `<span class="tag-option" data-tag="${id}" style="background:${tag.color}30;color:${tag.color}" onclick="toggleTag('${id}')">${tag.label}</span>`
-      ).join('');
-      
+      tagsContainer.innerHTML = Object.entries(data.tags).map(([id, tag]) => `<span class="tag-option" data-tag="${id}" style="background:${tag.color}30;color:${tag.color}" onclick="toggleTag('${id}')">${tag.label}</span>`).join('');
       if (taskId) {
         const task = data.tasks.find(t => t.id === taskId);
         document.getElementById('modal-title').textContent = 'Edit Task';
@@ -671,12 +657,7 @@
         document.getElementById('task-assignee').value = task.assignee || '';
         document.getElementById('task-due').value = task.dueDate || '';
         document.getElementById('task-column').value = task.column;
-        
-        (task.tags || []).forEach(t => {
-          const tagEl = document.querySelector(`.tag-option[data-tag="${t}"]`);
-          if (tagEl) tagEl.classList.add('selected');
-        });
-        
+        (task.tags || []).forEach(t => { const el = document.querySelector(`.tag-option[data-tag="${t}"]`); if (el) el.classList.add('selected'); });
         document.getElementById('comments-section').style.display = 'block';
         renderComments(task);
         document.getElementById('delete-btn').style.display = 'block';
@@ -691,173 +672,60 @@
         document.getElementById('comments-section').style.display = 'none';
         document.getElementById('delete-btn').style.display = 'none';
       }
-      
-      modal.classList.add('active');
+      document.getElementById('modal').classList.add('active');
       document.getElementById('task-title').focus();
     }
     
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-      currentTaskId = null;
-    }
+    function closeModal() { document.getElementById('modal').classList.remove('active'); currentTaskId = null; }
+    function toggleTag(tagId) { document.querySelector(`.tag-option[data-tag="${tagId}"]`).classList.toggle('selected'); }
     
-    function toggleTag(tagId) {
-      const el = document.querySelector(`.tag-option[data-tag="${tagId}"]`);
-      el.classList.toggle('selected');
-    }
-    
-    // Save task
     async function saveTask() {
       const id = document.getElementById('task-id').value;
       const selectedTags = Array.from(document.querySelectorAll('.tag-option.selected')).map(el => el.dataset.tag);
-      
-      const taskData = {
-        title: document.getElementById('task-title').value || 'Untitled',
-        description: document.getElementById('task-desc').value,
-        assignee: document.getElementById('task-assignee').value || null,
-        dueDate: document.getElementById('task-due').value || null,
-        column: document.getElementById('task-column').value,
-        tags: selectedTags,
-        updatedAt: new Date().toISOString()
-      };
-      
-      if (id) {
-        const task = data.tasks.find(t => t.id === id);
-        Object.assign(task, taskData);
-        if (!useLocalStorage) {
-          await fetch(`/api/tasks/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(taskData)
-          });
-        }
-      } else {
-        const newTask = {
-          id: genId(),
-          ...taskData,
-          comments: [],
-          createdAt: new Date().toISOString()
-        };
-        data.tasks.push(newTask);
-        if (!useLocalStorage) {
-          await fetch('/api/tasks', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newTask)
-          });
-        }
-      }
-      
-      await saveToStorage();
-      closeModal();
-      renderBoard();
-      showToast(id ? 'Task updated!' : 'Task created!');
+      const taskData = { title: document.getElementById('task-title').value || 'Untitled', description: document.getElementById('task-desc').value, assignee: document.getElementById('task-assignee').value || null, dueDate: document.getElementById('task-due').value || null, column: document.getElementById('task-column').value, tags: selectedTags, updatedAt: new Date().toISOString() };
+      if (id) { const task = data.tasks.find(t => t.id === id); Object.assign(task, taskData); if (!useLocalStorage) await fetch(`/api/tasks/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(taskData) }); }
+      else { const newTask = { id: genId(), ...taskData, comments: [], createdAt: new Date().toISOString() }; data.tasks.push(newTask); if (!useLocalStorage) await fetch('/api/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newTask) }); }
+      await saveToStorage(); closeModal(); renderBoard(); showToast(id ? 'Task updated!' : 'Task created!');
     }
     
-    // Delete task
     async function deleteTask() {
       if (!currentTaskId || !confirm('Delete this task?')) return;
-      
       data.tasks = data.tasks.filter(t => t.id !== currentTaskId);
-      
-      if (!useLocalStorage) {
-        await fetch(`/api/tasks/${currentTaskId}`, { method: 'DELETE' });
-      }
-      
-      await saveToStorage();
-      closeModal();
-      renderBoard();
-      showToast('Task deleted');
+      if (!useLocalStorage) await fetch(`/api/tasks/${currentTaskId}`, { method: 'DELETE' });
+      await saveToStorage(); closeModal(); renderBoard(); showToast('Task deleted');
     }
     
-    // Render comments
     function renderComments(task) {
-      const list = document.getElementById('comments-list');
-      list.innerHTML = (task.comments || []).map(c => {
+      document.getElementById('comments-list').innerHTML = (task.comments || []).map(c => {
         const user = data.users[c.author] || { name: c.author, emoji: '👤' };
-        const time = new Date(c.timestamp).toLocaleString();
-        return `
-          <div class="comment">
-            <div class="comment-header">
-              <span class="comment-author">${user.emoji} ${user.name}</span>
-              <span class="comment-time">${time}</span>
-            </div>
-            <div class="comment-text">${escapeHtml(c.text)}</div>
-          </div>
-        `;
+        return `<div class="comment"><div class="comment-header"><span class="comment-author">${user.emoji} ${user.name}</span><span class="comment-time">${new Date(c.timestamp).toLocaleString()}</span></div><div class="comment-text">${escapeHtml(c.text)}</div></div>`;
       }).join('') || '<div style="color:#666;font-size:0.8rem;">No comments yet</div>';
     }
     
-    // Add comment
     async function addComment() {
       const input = document.getElementById('comment-input');
       const text = input.value.trim();
       if (!text || !currentTaskId) return;
-      
       const task = data.tasks.find(t => t.id === currentTaskId);
-      const comment = {
-        id: 'c' + Date.now(),
-        author: 'aaron',
-        text: text,
-        timestamp: new Date().toISOString()
-      };
-      
+      const comment = { id: 'c' + Date.now(), author: 'aaron', text, timestamp: new Date().toISOString() };
       if (!task.comments) task.comments = [];
       task.comments.push(comment);
       task.updatedAt = new Date().toISOString();
-      
-      if (!useLocalStorage) {
-        await fetch(`/api/tasks/${currentTaskId}/comments`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(comment)
-        });
-      }
-      
+      if (!useLocalStorage) await fetch(`/api/tasks/${currentTaskId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(comment) });
       input.value = '';
-      await saveToStorage();
-      renderComments(task);
-      showToast('Comment added!');
+      await saveToStorage(); renderComments(task); showToast('Comment added!');
     }
     
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    }
-    
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    
-    // Konami code
-    document.addEventListener('keydown', (e) => {
-      konamiCode.push(e.key);
-      if (konamiCode.length > 10) konamiCode.shift();
-      if (konamiCode.join(',') === konamiSequence.join(',')) {
-        document.body.style.animation = 'rainbow 2s infinite';
-        showToast('🎉 SECRET MODE ACTIVATED! 🦞');
-        const style = document.createElement('style');
-        style.textContent = '@keyframes rainbow { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }';
-        document.head.appendChild(style);
-        setTimeout(() => document.body.style.animation = '', 5000);
-      }
-    });
-    
-    document.getElementById('comment-input')?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') addComment();
-    });
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+    function escapeHtml(str) { return str ? str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) : ''; }
     
     document.addEventListener('keydown', (e) => {
+      konamiCode.push(e.key); if (konamiCode.length > 10) konamiCode.shift();
+      if (konamiCode.join(',') === konamiSequence.join(',')) { document.body.style.animation = 'rainbow 2s infinite'; showToast('🎉 SECRET MODE! 🦞'); const s = document.createElement('style'); s.textContent = '@keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}'; document.head.appendChild(s); setTimeout(() => document.body.style.animation = '', 5000); }
       if (e.key === 'Escape') closeModal();
     });
-    
-    // Hide swipe hint after first scroll
-    document.querySelector('.board')?.addEventListener('scroll', () => {
-      document.querySelector('.swipe-hint').style.display = 'none';
-    }, { once: true });
+    document.getElementById('comment-input')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') addComment(); });
+    document.querySelector('.board')?.addEventListener('scroll', () => { document.querySelector('.swipe-hint').style.display = 'none'; }, { once: true });
     
     loadData();
   </script>
